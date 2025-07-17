@@ -1,0 +1,336 @@
+/* Paleta de Colores Pasteles y Tipografía Poppins */
+:root {
+    /* Menciones */
+    --color-todas: #e0bbe4; /* Violeta pastel */
+    --color-matematica: #95d5b2; /* Azul verdoso pastel */
+    --color-ciencias-naturales: #bbd0ff; /* Azul cielo pastel */
+    --color-lengua-literatura: #ffbebc; /* Rosa/rojo pastel */
+    --color-ciencias-sociales: #fec89a; /* Naranja/amarillo pastel */
+
+    /* Estados de Curso */
+    --completed-bg: #d4edda; /* Fondo Verde completado */
+    --completed-border: #28a745; /* Borde Verde completado */
+    --completed-text: #155724;
+
+    --available-border: #007bff; /* Borde Azul disponible */
+    --available-text: #004085;
+
+    --locked-bg: #f8d7da; /* Fondo Rojo bloqueado */
+    --locked-border: #dc3545; /* Borde Rojo bloqueado */
+    --locked-text: #721c24;
+
+    --hidden-mention-bg: #eceff1; /* Gris muy claro para ocultos */
+    --hidden-mention-border: #b0bec5; /* Borde Gris */
+    --hidden-mention-text: #607d8b;
+
+    /* Colores Generales */
+    --text-color: #333;
+    --background-color: #f8f9fa; /* Fondo general más suave */
+    --card-background: #ffffff;
+    --header-color: #4a4e69; /* Azul oscuro para títulos */
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    overflow-x: hidden; /* Evita que el body tenga scroll horizontal propio */
+}
+
+.container {
+    max-width: 1400px; /* Un poco más ancho para el layout horizontal */
+    margin: 20px auto;
+    background-color: var(--card-background);
+    padding: 30px;
+    border-radius: 15px; /* Más redondeado */
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1); /* Sombra más pronunciada y suave */
+}
+
+h1 {
+    text-align: center;
+    color: var(--header-color);
+    margin-bottom: 40px;
+    font-size: 2.8em; /* Título más grande */
+    font-weight: 700;
+    letter-spacing: -0.8px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+}
+
+.mention-selection {
+    text-align: center;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding: 18px;
+    background-color: #f0f4f8;
+    border-radius: 10px;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.08);
+}
+
+.mention-selection label {
+    font-weight: 600;
+    color: var(--header-color);
+    font-size: 1.15em;
+}
+
+.mention-selection select {
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: 1px solid #cddde7;
+    font-size: 1.05em;
+    background-color: white;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234a4e69'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 20px;
+    cursor: pointer;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    min-width: 250px;
+}
+.mention-selection select:hover {
+    border-color: var(--header-color);
+}
+.mention-selection select:focus {
+    outline: none;
+    border-color: var(--header-color);
+    box-shadow: 0 0 0 4px rgba(74, 78, 105, 0.2);
+}
+
+.mention-selection button {
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 1.05em;
+    font-weight: 600;
+    background-color: #ef5350; /* Rojo vibrante */
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.mention-selection button:hover {
+    background-color: #d32f2f;
+    transform: translateY(-2px);
+}
+.mention-selection button:active {
+    transform: translateY(0);
+}
+
+.legend {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 40px;
+    padding: 18px 25px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    background-color: #fafafa;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 1em;
+}
+
+.legend-item::before {
+    content: '';
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    vertical-align: middle;
+}
+
+.legend-item.completed::before { background-color: var(--completed-border); }
+.legend-item.available::before { background-color: var(--available-border); }
+.legend-item.locked::before { background-color: var(--locked-border); }
+.legend-item.hidden-mention::before { background-color: var(--hidden-mention-border); }
+
+/* Layout Horizontal para Semestres */
+.horizontal-scroll-container {
+    overflow-x: auto; /* Habilita el scroll horizontal */
+    padding-bottom: 20px; /* Espacio para la barra de scroll */
+    white-space: nowrap; /* Evita que los semestres salten de línea */
+    -webkit-overflow-scrolling: touch; /* Suaviza el scroll en iOS */
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #888 #f1f1f1; /* Firefox */
+}
+
+.horizontal-scroll-container::-webkit-scrollbar {
+    height: 10px;
+}
+.horizontal-scroll-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+.horizontal-scroll-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+.horizontal-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+
+#course-map {
+    display: flex; /* Muestra los semestres en una fila */
+    gap: 30px; /* Espacio entre semestres */
+    padding: 10px 0; /* Padding vertical dentro del scroll container */
+}
+
+.semester {
+    flex: 0 0 auto; /* No crecer, no encoger, base en auto (su contenido) */
+    width: 350px; /* Ancho fijo para cada semestre */
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 25px;
+    background-color: var(--card-background);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    vertical-align: top; /* Asegura que se alineen en la parte superior */
+    display: inline-block; /* Para que funcione white-space: nowrap; */
+}
+
+.semester h2 {
+    text-align: center;
+    color: var(--header-color);
+    margin-top: 0;
+    margin-bottom: 25px;
+    border-bottom: 2px solid var(--header-color);
+    padding-bottom: 12px;
+    font-size: 2em;
+    font-weight: 600;
+}
+
+.courses-grid {
+    display: flex; /* Cambia a flexbox para cursos dentro del semestre */
+    flex-direction: column; /* Apila los cursos verticalmente */
+    gap: 15px; /* Espacio entre los cursos */
+}
+
+.course {
+    background-color: var(--card-background);
+    border: 1px solid #ddd;
+    border-radius: 10px; /* Más redondeado */
+    padding: 20px;
+    min-height: 130px; /* Un poco más altos */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Colores de fondo de los cursos según la mención */
+.course[data-mention="TODAS"] { background-color: var(--color-todas); border-color: darken(var(--color-todas), 15%); }
+.course[data-mention="MATEMÁTICA"] { background-color: var(--color-matematica); border-color: darken(var(--color-matematica), 15%); }
+.course[data-mention="CIENCIAS NATURALES"] { background-color: var(--color-ciencias-naturales); border-color: darken(var(--color-ciencias-naturales), 15%); }
+.course[data-mention="LENGUA Y LITERATURA"] { background-color: var(--color-lengua-literatura); border-color: darken(var(--color-lengua-literatura), 15%); }
+.course[data-mention="CIENCIAS SOCIALES"] { background-color: var(--color-ciencias-sociales); border-color: darken(var(--color-ciencias-sociales), 15%); }
+
+
+/* Sobrescribe los colores de mención si el curso está en un estado específico */
+.course.completed {
+    background-color: var(--completed-bg) !important;
+    border-color: var(--completed-border) !important;
+    color: var(--completed-text) !important;
+    cursor: default;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.course.completed::after {
+    content: '✔';
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 2em;
+    color: var(--completed-border);
+    font-weight: bold;
+}
+
+.course.available {
+    /* Mantiene el color de fondo de la mención, solo cambia borde y texto */
+    border-color: var(--available-border) !important;
+    color: var(--available-text) !important;
+    cursor: pointer;
+}
+
+.course.available:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.course.locked {
+    background-color: var(--locked-bg) !important;
+    border-color: var(--locked-border) !important;
+    color: var(--locked-text) !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+    pointer-events: none;
+}
+.course.locked:hover {
+    transform: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+.course.hidden-mention {
+    background-color: var(--hidden-mention-bg) !important;
+    border-color: var(--hidden-mention-border) !important;
+    color: var(--hidden-mention-text) !important;
+    cursor: not-allowed;
+    opacity: 0.4; /* Muy atenuado */
+    pointer-events: none; /* No interactuable */
+}
+
+.course-name {
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 1.2em;
+    line-height: 1.3;
+}
+
+.course-code {
+    font-size: 0.9em;
+    color: rgba(0,0,0,0.6); /* Un poco más oscuro */
+    margin-bottom: 5px;
+}
+
+.course-credits {
+    font-size: 0.85em;
+    color: rgba(0,0,0,0.5);
+    margin-bottom: 5px;
+}
+
+.prerequisites {
+    font-size: 0.8em;
+    color: rgba(0,0,0,0.7);
+    margin-top: 10px;
+    border-top: 1px solid rgba(0,0,0,0.1); /* Línea separadora más suave */
+    padding-top: 8px;
+    width: 100%;
+}
+
+.course.locked .prerequisites {
+    color: var(--locked-text) !important;
+}
+
+/* Función para oscurecer colores dinámicamente si tu navegador lo soporta o si usas preprocesador */
+/* Esto es un truco CSS moderno, si no funciona puedes usar colores fijos */
+/* Si no ves el efecto, no te preocupes, el color fijo del borde es suficientemente bueno */
+/* O puedes definir los colores de borde directamente en :root */
+/* Por ejemplo, --color-todas-border: #c19ec4; */
