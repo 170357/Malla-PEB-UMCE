@@ -17,11 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
             updateCourseStates();
         } catch (error) {
             console.error('Error cargando los datos de la malla:', error);
-            // Si hay un error al cargar, intentar usar los datos directamente si están pegados (solo para desarrollo)
-            // semesterData = { ...pegar aquí el JSON si es para testing local sin servidor... };
-            // initializeCourseMap();
-            // loadProgress();
-            // updateCourseStates();
         }
     }
 
@@ -59,14 +54,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const coursesGrid = semesterDiv.querySelector('.courses-grid');
 
             semesterData[semesterKey].forEach(courseArray => {
-                // Desestructuración: [nombre, código, semestre, créditos, prerrequisitos, mención]
-                // Ajustamos el índice 4 para prerrequisitos y 5 para mención según el nuevo JSON
                 const [name, code, , credits, prerequisites, mention] = courseArray;
                 const courseElement = document.createElement('div');
                 courseElement.classList.add('course');
                 courseElement.dataset.code = code;
-                courseElement.dataset.mention = mention; // Almacenar la mención en el dataset
-                courseElement.dataset.semester = semesterNum; // Almacenar el semestre
+                courseElement.dataset.mention = mention;
+                courseElement.dataset.semester = semesterNum;
 
                 const reqsDisplay = prerequisites && prerequisites.length > 0 && prerequisites[0] !== "Sin prerrequisitos" ?
                                     `Req: ${prerequisites.join(', ')}` : '';
@@ -92,31 +85,18 @@ document.addEventListener('DOMContentLoaded', () => {
             // Restablecer clases y opacidad
             courseElement.classList.remove('completed', 'available', 'locked', 'hidden-mention');
             courseElement.style.cursor = '';
-            courseElement.style.display = ''; // Asegurar que el curso sea visible por defecto para el chequeo
 
-            // 1. Manejar visibilidad por mención
-            // Cursos comunes (TODAS) siempre visibles.
-            // Cursos de mención específicos solo visibles si la mención seleccionada es la suya o 'TODAS'.
-            // Si el semestre es <= 6, todos son visibles (plan común).
-            if (courseMention !== 'TODAS' && courseSemester > 6) {
-                if (selectedMention === 'TODAS') {
-                    // Si estamos en "Plan Común" y es un ramo de mención de S7+, ocultarlo y marcarlo.
-                    courseElement.classList.add('hidden-mention');
-                    courseElement.style.display = 'none'; // Ocultar
-                    return; // No procesar más el estado de este curso
-                } else if (courseMention !== selectedMention) {
-                    // Si hay una mención seleccionada y el ramo no es de esa mención o "TODAS"
-                    courseElement.classList.add('hidden-mention');
-                    courseElement.style.display = 'none'; // Ocultar
-                    return; // No procesar más el estado de este curso
-                }
+            // 1. Manejar visibilidad/estado por mención
+            // Si el semestre es <= 6, es un curso común y siempre es relevante.
+            // Si el semestre es > 6 y NO es de la mención seleccionada O no es "TODAS", se oculta/desactiva.
+            if (courseSemester > 6 && courseMention !== 'TODAS' && courseMention !== selectedMention) {
+                courseElement.classList.add('hidden-mention');
+                return; // No procesar más el estado de este curso
             }
 
-
-            // 2. Determinar estado de completado, disponible o bloqueado (para cursos visibles)
+            // 2. Determinar estado de completado, disponible o bloqueado (para cursos relevantes)
             if (completedCourses.has(courseCode)) {
                 courseElement.classList.add('completed');
-                courseElement.style.cursor = 'default';
             } else {
                 let allPrereqsMet = true;
                 const courseArray = Object.values(semesterData).flat().find(c => c[1] === courseCode);
@@ -126,22 +106,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     for (const prereqCode of prerequisites) {
                         // Manejo especial para "TODOS LOS RAMOS HASTA 8 SEMESTRE"
                         if (prereqCode === "TODOS LOS RAMOS HASTA 8 SEMESTRE") {
-                            // Contar cursos comunes hasta S8
-                            const totalCommonCoursesUntilS8 = Object.keys(semesterData)
+                            const totalRelevantCoursesUntilS8 = Object.keys(semesterData)
                                 .filter(s => parseInt(s.replace('s', '')) <= 8)
                                 .flatMap(s => semesterData[s])
-                                .filter(c => c[5] === 'TODAS' || c[5] === selectedMention) // Considerar cursos de la mención si ya se seleccionó
+                                .filter(c => c[5] === 'TODAS' || (c[5] !== 'TODAS' && c[5] === selectedMention))
                                 .length;
 
-                            const completedCommonCoursesUntilS8 = Object.keys(semesterData)
+                            const completedRelevantCoursesUntilS8 = Object.keys(semesterData)
                                 .filter(s => parseInt(s.replace('s', '')) <= 8)
                                 .flatMap(s => semesterData[s])
-                                .filter(c => completedCourses.has(c[1]) && (c[5] === 'TODAS' || c[5] === selectedMention))
+                                .filter(c => completedCourses.has(c[1]) && (c[5] === 'TODAS' || (c[5] !== 'TODAS' && c[5] === selectedMention)))
                                 .length;
 
-                            // Definir un porcentaje de completado, ej. 80% de los comunes + mención hasta S8
-                            const completionPercentage = (completedCommonCoursesUntilS8 / totalCommonCoursesUntilS8) * 100;
-                            if (completionPercentage < 80) { // Puedes ajustar este porcentaje
+                            // Ejemplo: requerir 80% de los cursos relevantes hasta S8 completados
+                            const completionPercentage = (totalRelevantCoursesUntilS8 > 0) ? (completedRelevantCoursesUntilS8 / totalRelevantCoursesUntilS8) * 100 : 100;
+                            if (completionPercentage < 80) { // Ajusta el porcentaje según necesites
                                 allPrereqsMet = false;
                                 break;
                             }
@@ -152,14 +131,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
 
-                // Si todos los prerrequisitos se cumplen Y la mención es compatible
-                // O si es un curso común (TODAS)
                 if (allPrereqsMet) {
                     courseElement.classList.add('available');
-                    courseElement.style.cursor = 'pointer';
                 } else {
                     courseElement.classList.add('locked');
-                    courseElement.style.cursor = 'not-allowed';
                 }
             }
         });
@@ -168,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event listener para clic en los cursos
     courseMap.addEventListener('click', (event) => {
         const courseElement = event.target.closest('.course');
-        if (!courseElement) return; // No es un curso
+        if (!courseElement) return;
 
         const courseCode = courseElement.dataset.code;
         const courseName = courseElement.querySelector('.course-name').textContent;
@@ -205,7 +180,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
-        // No hacer nada si el curso está "locked" o "hidden-mention"
     });
 
     // Event listener para el cambio de mención
