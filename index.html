@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malla Curricular - Pedagogía en Educación Básica</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Malla Curricular - Pedagogía en Educación Básica con Menciones</h1>
+
+        <div class="mention-selection">
+            <label for="mention-select">Selecciona tu Mención:</label>
+            <select id="mention-select">
+                <option value="TODAS">Plan Común (Hasta Semestre 6)</option>
+                <option value="CIENCIAS SOCIALES">Mención: Ciencias Sociales</option>
+                <option value="CIENCIAS NATURALES">Mención: Ciencias Naturales</option>
+                <option value="MATEMÁTICA">Mención: Matemática</option>
+                <option value="LENGUA Y LITERATURA">Mención: Lengua y Literatura</option>
+            </select>
+            <button id="reset-progress">Reiniciar Progreso</button>
+        </div>
+
+        <div class="legend">
+            <span class="legend-item completed">Completado</span>
+            <span class="legend-item available">Disponible</span>
+            <span class="legend-item locked">Bloqueado</span>
+            <span class="legend-item hidden-mention">Oculto (otra mención)</span>
+        </div>
+
+        <div id="course-map">
+            </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
