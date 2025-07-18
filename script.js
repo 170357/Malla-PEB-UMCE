@@ -54,14 +54,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const coursesGrid = semesterDiv.querySelector('.courses-grid');
 
             semesterData[semesterKey].forEach(courseArray => {
-                const [name, code, , credits, prerequisites, mention] = courseArray;
+                // Nueva estructura de courseArray: [code, name, credits, prerequisites, semesterNum, approvedColor, mention]
+                const [code, name, credits, prerequisites, , approvedColor, mention] = courseArray; // semesterNum ya lo tenemos del loop
+
                 const courseElement = document.createElement('div');
                 courseElement.classList.add('course');
                 courseElement.dataset.code = code;
                 courseElement.dataset.mention = mention;
                 courseElement.dataset.semester = semesterNum;
+                courseElement.dataset.approvedColor = approvedColor; // Guardar el color aprobado como data attribute
 
-                const reqsDisplay = prerequisites && prerequisites.length > 0 && prerequisites[0] !== "Sin prerrequisitos" ?
+                const reqsDisplay = prerequisites && prerequisites.length > 0 && !prerequisites.includes("Sin prerrequisitos") ?
                                     `Req: ${prerequisites.join(', ')}` : '';
 
                 courseElement.innerHTML = `
@@ -81,9 +84,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const courseCode = courseElement.dataset.code;
             const courseMention = courseElement.dataset.mention;
             const courseSemester = parseInt(courseElement.dataset.semester);
+            const approvedColor = courseElement.dataset.approvedColor; // Obtener el color aprobado
 
-            // Restablecer clases y opacidad
+            // Restablecer clases y estilos
             courseElement.classList.remove('completed', 'available', 'locked', 'hidden-mention');
+            courseElement.style.backgroundColor = ''; // Limpiar estilos inline previos
+            courseElement.style.borderColor = '';
+            courseElement.style.color = ''; // Limpiar color de texto previo
             courseElement.style.cursor = '';
 
             // 1. Manejar visibilidad/estado por mención
@@ -97,10 +104,22 @@ document.addEventListener('DOMContentLoaded', () => {
             // 2. Determinar estado de completado, disponible o bloqueado (para cursos relevantes)
             if (completedCourses.has(courseCode)) {
                 courseElement.classList.add('completed');
+                courseElement.style.backgroundColor = approvedColor; // Aplicar color aprobado
+                courseElement.style.borderColor = approvedColor; // Aplicar color aprobado al borde
+                courseElement.style.color = 'var(--completed-text)'; // Aplicar color de texto definido en CSS
             } else {
                 let allPrereqsMet = true;
-                const courseArray = Object.values(semesterData).flat().find(c => c[1] === courseCode);
-                const prerequisites = courseArray ? courseArray[4] : [];
+                // Buscar el courseArray en semesterData usando courseCode
+                let courseArrayData = null;
+                for (const semKey in semesterData) {
+                    const found = semesterData[semKey].find(c => c[0] === courseCode); // c[0] es el código
+                    if (found) {
+                        courseArrayData = found;
+                        break;
+                    }
+                }
+
+                const prerequisites = courseArrayData ? courseArrayData[3] : []; // c[3] son los prerrequisitos
 
                 if (prerequisites && prerequisites.length > 0) {
                     for (const prereqCode of prerequisites) {
@@ -109,13 +128,13 @@ document.addEventListener('DOMContentLoaded', () => {
                             const totalRelevantCoursesUntilS8 = Object.keys(semesterData)
                                 .filter(s => parseInt(s.replace('s', '')) <= 8)
                                 .flatMap(s => semesterData[s])
-                                .filter(c => c[5] === 'TODAS' || (c[5] !== 'TODAS' && c[5] === selectedMention))
+                                .filter(c => c[6] === 'TODAS' || (c[6] !== 'TODAS' && c[6] === selectedMention)) // c[6] es la mención
                                 .length;
 
                             const completedRelevantCoursesUntilS8 = Object.keys(semesterData)
                                 .filter(s => parseInt(s.replace('s', '')) <= 8)
                                 .flatMap(s => semesterData[s])
-                                .filter(c => completedCourses.has(c[1]) && (c[5] === 'TODAS' || (c[5] !== 'TODAS' && c[5] === selectedMention)))
+                                .filter(c => completedCourses.has(c[0]) && (c[6] === 'TODAS' || (c[6] !== 'TODAS' && c[6] === selectedMention))) // c[0] es el código, c[6] es la mención
                                 .length;
 
                             // Ejemplo: requerir 80% de los cursos relevantes hasta S8 completados
@@ -160,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Verificar si desmarcar este curso rompería prerrequisitos de cursos ya completados
                 for (const semKey in semesterData) {
                     for (const courseArray of semesterData[semKey]) {
-                        const [, cCode, , , cPrereqs] = courseArray;
+                        const [cCode, , , cPrereqs] = courseArray; // cCode es el código, cPrereqs son los prerrequisitos
                         if (completedCourses.has(cCode) && cCode !== courseCode) {
                             if (cPrereqs && cPrereqs.includes(courseCode)) {
                                 canUnmark = false;
