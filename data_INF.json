@@ -49,9 +49,9 @@
     "s6": [
         ["EEGB601","Práctica IV Diversidad e inclusión", "10 SCT", ["EEGB501"], 6, "#E087C9", "TODAS"],
         ["EEGB602","Educación Patrimonial y Ciudadanía", "4 SCT", [], 6, "#FCF09F", "TODAS"],
-        ["EEGB604","Desarrollo del pensamiento algebraico y su didáctica", "4 SCT", ["EEGB304"], 6, "#8DE0A6", "TODAS"],
-        ["EEGB605","Educación literaria y formación de audiencias lectoras", "4 SCT", [], 6, "#4EB3DE", "TODAS"],
-        ["EEGB606","Educación Familia Y Comunidad", "4 SCT", [], 6, "#F27C7C", "TODAS"],
+        ["EEGB604","Desarrollo del pensamiento algebraico y su didáctica", "4 SCT", ["EEGB304"], 6, "#4EB3DE", "TODAS"],
+        ["EEGB605","Educación literaria y formación de audiencias lectoras", "4 SCT", [], 6, "#F27C7C", "TODAS"],
+        ["EEGB606","Educación Familia Y Comunidad", "4 SCT", [], 6, "#F0AB74", "TODAS"],
         ["EEGB607","Fortalecimiento del aprendizaje II", "2 SCT", [], 6, "#F0AB74", "TODAS"]
     ],
     "s7": [
@@ -82,7 +82,7 @@
         ["EEGB805","Investigación Educacional II", "4 SCT", ["FPED702"], 8, "#F0AB74", "TODAS"],
         ["EEGB806","Proyecto de Medioambiente para la Educación", "6 SCT", ["EEGB707"], 8, "#8DE0A6", "CIENCIAS NATURALES"],
         ["EEGB807","Enseñanza de las Ciencias Naturales y su transversalidad", "6 SCT", ["EEGB708"], 8, "#8DE0A6", "CIENCIAS NATURALES"],
-        ["EEGB809","Resolución de problemas y juego en el aula de matemática", "6 SCT", ["EEGB304", "EEGB404", "EEGB504"], 8, "#4EB3DE", "MATEMÁTICA"],
+        ["EEGB809","Resolución de problemas y juego en el aula de matemática", "6 SCT", ["EEGB304", "EEGB406", "EEGB504"], 8, "#4EB3DE", "MATEMÁTICA"],
         ["EEGB810","Cambios paradigmáticos de lo humano y desafíos para la Educación Matemática", "6 SCT", ["EEGB709"], 8, "#4EB3DE", "MATEMÁTICA"],
         ["EEGB812","Nuevas prácticas y educación de la literatura", "4 SCT", [], 8, "#F27C7C", "LENGUA Y LITERATURA"],
         ["EEGB813","Evaluación de procesos de aprendizaje en Lengua y Literatura", "4 SCT", [], 8, "#F27C7C", "LENGUA Y LITERATURA"],
@@ -90,11 +90,11 @@
     ],
     "s9": [
         ["EEGB901","Práctica Final I: Educación y Familia", "22 SCT", ["TODOS LOS RAMOS HASTA 8 SEMESTRE"], 9, "#E087C9", "TODAS"],
-        ["EEGB902","Seminario de Intervención didáctica en la Mención I", "4 SCT", ["TODOS LOS RAMOS HASTA 8 SEMESTRE"], 9, "#E087C9", "TODAS"],
+        ["EEGB902","Seminario de Intervención didáctica en la Mención I", "4 SCT", ["TODOS LOS RAMOS HASTA 8 SEMESTRE"], 9, "#F0AB74", "TODAS"],
         ["EEGB903","Fortalecimiento de competencias de egreso", "4 SCT", [], 9, "#F0AB74", "TODAS"]
     ],
     "s10": [
         ["EEGBX01","Práctica Final II: Educación y Comunidad", "22 SCT", ["EEGB901"], 10, "#E087C9", "TODAS"],
-        ["EEGBX02","Seminario de Intervención didáctica en la Mención II", "8 SCT", ["TODOS LOS RAMOS HASTA 8 SEMESTRE"], 10, "#E087C9", "TODAS"]
+        ["EEGBX02","Seminario de Intervención didáctica en la Mención II", "8 SCT", ["TODOS LOS RAMOS HASTA 8 SEMESTRE"], 10, "#F0AB74", "TODAS"]
     ]
 }
